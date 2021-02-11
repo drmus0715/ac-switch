@@ -39,7 +39,7 @@
 # Debug files
 *.dSYM/
 *.su
-*.idb
+*.idb4
 *.pdb
 
 # Kernel Module Compile Results
@@ -50,3 +50,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# VSCode Folder
+.vscode/
