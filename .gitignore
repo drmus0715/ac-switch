@@ -53,3 +53,8 @@ dkms.conf
 
 # VSCode Folder
 .vscode/
+
+# Pyinstaller
+__pycache__/
+build/
+dist/

@@ -18,8 +18,17 @@ import time
 from time import sleep
 from tkinter import ttk
 
+import sys
+import os
+
 instr = None
 COMPORTS = list_ports.comports()
+
+
+def resourcePath(filename):
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, filename)
+    return os.path.join(filename)
 
 
 class Application(tk.Frame):
@@ -35,7 +44,8 @@ class Application(tk.Frame):
         self.inst = serial.Serial()
 
         # 画像ファイル読み込み
-        self.image_stat = tk.PhotoImage(file="./resource/disconnect.png")
+        self.image_stat = tk.PhotoImage(
+            file=resourcePath("resource/disconnect.png"))
 
         self.CreateWidgets()
         self.ChangeStateClose()
@@ -71,6 +81,8 @@ class Application(tk.Frame):
         self.ChangeStateOff()
 
     def ClickedClose(self, event):
+        self.SendAction("OFF\n")
+        sleep(0.1)
         self.ClosePort()
         self.ChangeStateClose()
 
@@ -97,7 +109,8 @@ class Application(tk.Frame):
         return self.inst.readline().decode('ascii')
 
     def ChangeStateClose(self):
-        self.image_stat = tk.PhotoImage(file="./resource/disconnect.png")
+        self.image_stat = tk.PhotoImage(
+            file=resourcePath("resource/disconnect.png"))
         self.canvas_img.itemconfig(self.image_on_canvas, image=self.image_stat)
         self.button_open.configure(text='Open')
         self.button_open.bind('<Button-1>', self.ClickedOpen)
@@ -105,7 +118,7 @@ class Application(tk.Frame):
         self.button_onoff.unbind('<Button-1>')
 
     def ChangeStateOn(self):
-        self.image_stat = tk.PhotoImage(file="./resource/on.png")
+        self.image_stat = tk.PhotoImage(file=resourcePath("resource/on.png"))
         self.canvas_img.itemconfig(self.image_on_canvas, image=self.image_stat)
         self.button_open.configure(text='Close')
         self.button_open.bind('<Button-1>', self.ClickedClose)
@@ -114,7 +127,7 @@ class Application(tk.Frame):
         self.button_onoff.bind('<Button-1>', self.ClickedOff)
 
     def ChangeStateOff(self):
-        self.image_stat = tk.PhotoImage(file="./resource/off.png")
+        self.image_stat = tk.PhotoImage(file=resourcePath("resource/off.png"))
         self.canvas_img.itemconfig(self.image_on_canvas, image=self.image_stat)
         self.button_open.configure(text='Close')
         self.button_open.bind('<Button-1>', self.ClickedClose)
