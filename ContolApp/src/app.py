@@ -28,35 +28,99 @@ class Application(tk.Frame):
 
         self.master = master
         self.master.title('AC ON/OFF Remote Switch')
-        self.master.geometry("360x210")
+        self.master.geometry("360x230")
         # self.pack()
 
+        # Serial Instance
+        self.inst = serial.Serial()
+
         # 画像ファイル読み込み
-        self.init_image = tk.PhotoImage(file="./resource/disconnect.png")
+        self.image_stat = tk.PhotoImage(file="./resource/disconnect.png")
 
-        self.create_widgets()
+        self.CreateWidgets()
+        self.ChangeStateClose()
 
-    def create_widgets(self):
+    def CreateWidgets(self):
         ### Grid - row0
         self.label_port = tk.Label(self.master, text='COM Port')
         self.label_port.grid(row=0, column=0, sticky=tk.E, pady=10)
 
-        self.box_port = ttk.Combobox(self.master, width=30, value=COMPORTS)
-        # self.box_port.set(COMPORTS[1])
+        self.box_port = ttk.Combobox(self.master,
+                                     width=30,
+                                     value=COMPORTS,
+                                     state='readonly')
+        self.box_port.current(0)
         self.box_port.grid(row=0, column=1)
 
         self.button_open = ttk.Button(self.master, text='Open', width=10)
         self.button_open.grid(row=0, column=2)
+        self.button_open.bind('<Button-1>', self.ClickedOpen)
 
         ### Grid - row1
         self.canvas_img = tk.Canvas(self.master, width=226, height=136)
         self.canvas_img.grid(row=1, column=1)
-        self.canvas_img.create_image(10,
-                                     10,
-                                     image=self.init_image,
-                                     anchor=tk.NW)
+        self.image_on_canvas = self.canvas_img.create_image(
+            10, 10, image=self.image_stat, anchor=tk.NW)
 
         ### Grid - row2
+        self.button_onoff = ttk.Button(self.master, text='ON', width=30)
+        self.button_onoff.grid(row=2, column=1, pady=10)
+
+    def ClickedOpen(self, event):
+        self.OpenPort()
+        self.ChangeStateOff()
+
+    def ClickedClose(self, event):
+        self.ClosePort()
+        self.ChangeStateClose()
+
+    def ClickedOn(self, event):
+        self.SendAction("ON\n")
+        self.ChangeStateOn()
+
+    def ClickedOff(self, event):
+        self.SendAction("OFF\n")
+        self.ChangeStateOff()
+
+    def OpenPort(self):
+        port, desc, hwid = COMPORTS[self.box_port.current()]
+        self.inst.port = port
+        self.inst.baudrate = 115200
+        self.inst.timeout = 0.5
+        self.inst.open()
+
+    def ClosePort(self):
+        self.inst.close()
+
+    def SendAction(self, text):
+        self.inst.write(text.encode("utf-8"))
+        return self.inst.readline().decode('ascii')
+
+    def ChangeStateClose(self):
+        self.image_stat = tk.PhotoImage(file="./resource/disconnect.png")
+        self.canvas_img.itemconfig(self.image_on_canvas, image=self.image_stat)
+        self.button_open.configure(text='Open')
+        self.button_open.bind('<Button-1>', self.ClickedOpen)
+        self.button_onoff['state'] = tk.DISABLED
+        self.button_onoff.unbind('<Button-1>')
+
+    def ChangeStateOn(self):
+        self.image_stat = tk.PhotoImage(file="./resource/on.png")
+        self.canvas_img.itemconfig(self.image_on_canvas, image=self.image_stat)
+        self.button_open.configure(text='Close')
+        self.button_open.bind('<Button-1>', self.ClickedClose)
+        self.button_onoff['state'] = tk.NORMAL
+        self.button_onoff.configure(text='OFF')
+        self.button_onoff.bind('<Button-1>', self.ClickedOff)
+
+    def ChangeStateOff(self):
+        self.image_stat = tk.PhotoImage(file="./resource/off.png")
+        self.canvas_img.itemconfig(self.image_on_canvas, image=self.image_stat)
+        self.button_open.configure(text='Close')
+        self.button_open.bind('<Button-1>', self.ClickedClose)
+        self.button_onoff['state'] = tk.NORMAL
+        self.button_onoff.configure(text='ON')
+        self.button_onoff.bind('<Button-1>', self.ClickedOn)
 
 
 # アプリケーション起動
