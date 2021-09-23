@@ -1,6 +1,6 @@
 # AC ON/OFF Remote Switch
 
-PCとUSBで接続し、Teraterm等からACをON/OFFできる装置です。また、5chの入力があり、アラーム等の監視も可能です。
+PCとUSBで接続し、Teraterm等からACをON/OFFできる装置です。5chの入力があり、アラーム等の監視も可能です。
 
 ## 操作ソフトウェア
 
