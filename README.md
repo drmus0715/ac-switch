@@ -30,14 +30,14 @@ PCとUSBで接続し、Teraterm等からACをON/OFFできる装置です。5ch�
 | コマンド | 説明 |
 | -------- | ---- |
 | LIST     |コマンド一覧を表示|
-| STAT     |`[ON|OFF]` 現在のON/OFF状態|
-| ON       |`[OK|FAIL]` 電源ON|
-| OFF      |`[OK|FAIL]` 電源OFF|
-| GET_0    |`[HIGH|LOW]` CH0の状態|
-| GET_1    |`[HIGH|LOW]` CH1の状態|
-| GET_2    |`[HIGH|LOW]` CH2の状態|
-| GET_3    |`[HIGH|LOW]` CH3の状態|
-| GET_4    |`[HIGH|LOW]` CH4の状態|
+| STAT     |`[ON｜OFF]` 現在のON/OFF状態|
+| ON       |`[OK｜FAIL]` 電源ON|
+| OFF      |`[OK｜FAIL]` 電源OFF|
+| GET_0    |`[HIGH｜LOW]` CH0の状態|
+| GET_1    |`[HIGH｜LOW]` CH1の状態|
+| GET_2    |`[HIGH｜LOW]` CH2の状態|
+| GET_3    |`[HIGH｜LOW]` CH3の状態|
+| GET_4    |`[HIGH｜LOW]` CH4の状態|
 | DEV      |デバイスの説明を表示|
 | VER      |ファームウェアバージョン表示|
 
