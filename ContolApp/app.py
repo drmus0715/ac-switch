@@ -78,7 +78,17 @@ class Application(tk.Frame):
 
     def ClickedOpen(self, event):
         self.OpenPort()
-        self.ChangeStateOff()
+        while True:
+            self.ChangeStateConn()
+            res = self.SendAction("STAT\n")
+            if res == "ON":
+                self.ChangeStateOn()
+                break
+            elif res == "OFF":
+                self.ChangeStateOff()
+                break
+            sleep(0.5)
+        # self.ChangeStateOff()
 
     def ClickedClose(self, event):
         self.SendAction("OFF\n")
@@ -87,7 +97,7 @@ class Application(tk.Frame):
         self.ChangeStateClose()
 
     def ClickedOn(self, event):
-        self.SendAction("ON\n")
+        res = self.SendAction("ON\n")
         self.ChangeStateOn()
 
     def ClickedOff(self, event):
@@ -98,7 +108,7 @@ class Application(tk.Frame):
         port, desc, hwid = COMPORTS[self.box_port.current()]
         self.inst.port = port
         self.inst.baudrate = 115200
-        self.inst.timeout = 0.5
+        self.inst.timeout = 0.2
         self.inst.open()
 
     def ClosePort(self):
@@ -106,7 +116,10 @@ class Application(tk.Frame):
 
     def SendAction(self, text):
         self.inst.write(text.encode("utf-8"))
-        return self.inst.readline().decode('ascii')
+        line = self.inst.readline()
+        line_cl = line.strip().decode('ascii')
+        print(line_cl)
+        return line_cl
 
     def ChangeStateClose(self):
         self.image_stat = tk.PhotoImage(
@@ -135,6 +148,11 @@ class Application(tk.Frame):
         self.button_onoff.configure(text='ON')
         self.button_onoff.bind('<Button-1>', self.ClickedOn)
 
+    def ChangeStateConn(self):
+        self.image_stat = tk.PhotoImage(
+            file=resourcePath("resource/connect.png"))
+        self.canvas_img.itemconfig(self.image_on_canvas, image=self.image_stat)
+        self.canvas_img.update()
 
 # アプリケーション起動
 root = tk.Tk()
