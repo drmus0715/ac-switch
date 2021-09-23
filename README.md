@@ -4,13 +4,14 @@ PCとUSBで接続し、Teraterm等からACをON/OFFできる装置です。5ch�
 
 ## 操作ソフトウェア
 
-[Releaseページ](https://github.com/drmus0715/ac-switch/releases)から最新版のソフトウェアをダウンロードできます。
+[Releaseページ](https://github.com/drmus0715/ac-switch/releases)から最新版のソフトウェアをダウンロードできます。操作ソフトウェア本体は`Release_ACSW_Control_v*.*.*.zip`です。
 
 ![img](./img/software_1.png)
 
 ### 使い方
 
-1. AC ON/OFF Remote SwitchとPCをUSB-miniBケーブルで接続します。
+1. AC ON/OFF Remote Switch本体とPCをUSB-miniBケーブルで接続します。
+1. ダウンロードしたファイル(`Release_ACSW_Control_v*.*.*.zip`)を解凍し、`app.exe`を起動します。
 1. COM Portから「USB-SERIAL CH340」を選択し、`[Open]`ボタンをクリックします。
 1. `[ON]`ボタンをクリックするとスイッチがONになります。
 
